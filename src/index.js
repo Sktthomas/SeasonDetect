@@ -7,6 +7,20 @@ class App extends React.Component { //Class component instead of functional comp
 
     state = {lat: null, errorMessage: ''} //alternate way to using constructor. Initialises state
 
+    renderContent() { //helper method that avoids us having conditionals in render(). This way futureproofs our project since we might have changes in parent return function
+
+        //Conditional loading of Latitude, error message or a loading screen, depending on state of the component
+        if( this.state.errorMessage && !this.state.lat) {
+            return <div> Error: {this.state.errorMessage} </div>
+        }
+
+        if(!this.state.errorMessage && this.state.lat) {
+            return <SeasonDisplay lat={this.state.lat}/>
+        }
+        
+        return ( <Spinner message="Waiting for user to accept location request"/>)
+    }
+
 
     //this method runs when the component is mounted for the first time. It is not run when updating or rerendering. This is why we put the API call inside of it. That way the constructor also only does one thing: initialising our state
     componentDidMount(){
@@ -22,16 +36,11 @@ class App extends React.Component { //Class component instead of functional comp
     //render should be pretty pure and only return JSX. Not anything else.
     render() { //class has one method by default. Therefore we also needs to implement React.component. We are subclassing it into App clas
 
-        //Conditional loading of Latitude, error message or a loading screen, depending on state of the component
-        if( this.state.errorMessage && !this.state.lat) {
-            return <div> Error: {this.state.errorMessage} </div>
-        }
-
-        if(!this.state.errorMessage && this.state.lat) {
-            return <SeasonDisplay lat={this.state.lat}/>
-        }
-        
-        return( <Spinner message="Waiting for user to accept location request"/>)
+        return(
+            <div className="border red">
+                {this.renderContent()}
+            </div>
+        )
     }
 }
 
