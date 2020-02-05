@@ -3,13 +3,7 @@ import ReactDOM from 'react-dom';
 
 class App extends React.Component { //Class component instead of functional component. 
 
-    //The very first function called when an instance of the class is created. Therefore good when initializing state
-    constructor(props) {
-        super(props); //Since we're inheriting from React.Component, we have to set up the constructor code using the super() to first construct a React Component
-
-        this.state = { lat: null, errorMessage: '' } //state object. Will contain relevant data like our latitude. We initialise it as null since we don't know it yet. This is the only time we assign this.state using "="
-
-    }
+    state = {lat: null, errorMessage: ''} //alternate way to using constructor. Initialises state
 
 
     //this method runs when the component is mounted for the first time. It is not run when updating or rerendering. This is why we put the API call inside of it. That way the constructor also only does one thing: initialising our state
