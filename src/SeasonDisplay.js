@@ -1,4 +1,17 @@
+import './seasonDisplay.css';
 import React from 'react';
+
+
+const seasonConfig = { //Config object that holds our text and icon names for whether it's summer or winter
+    summer: {
+        seasonText: 'Let\'s hit the beach!',
+        seasonIcon: 'sun'
+    },
+    winter: {
+        seasonText: 'Brrrr it\'s cold!',
+        seasonIcon: 'snowflake'
+    },
+}
 
 const getSeason = (lat, month) => {
     if (month > 2 && month < 9) {
@@ -11,15 +24,13 @@ const getSeason = (lat, month) => {
 const SeasonDisplay = props => { //Remember to set props as arguments to use it!
 
     const season = getSeason(props.lat, new Date().getMonth());
-    const seasonText = season === 'winter' ? 'Brrr it is chilly!' : 'Let\'s hit the beach!'
-    const seasonIcon = season === 'winter' ? 'snowflake' : 'sun';
-
+    const {seasonText, seasonIcon} = seasonConfig[season] //pulls out season text and seasonIcon from our config file, depending on the season.
 return( 
-    <div>
-        <i className={`${seasonIcon} icon`}/> {/* Backtick expression that inserts the result of the seasonIcon helper function as a string */}
+    <div className={`season-display ${season}`}> {/* It is good coding procedure to call the root div the same as the component */}
+        <i className={`icon-left massive ${seasonIcon} icon`}/> {/* Backtick expression that inserts the result of the seasonIcon helper function as a string */}
         <h1>{seasonText}
         </h1>
-        <i className={`${seasonIcon} icon`}/>
+        <i className={`icon-right massive ${seasonIcon} icon`}/>
     </div>
 );
 }
