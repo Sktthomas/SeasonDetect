@@ -7,21 +7,32 @@ class App extends React.Component { //Class component instead of functional comp
     constructor(props) {
         super(props); //Since we're inheriting from React.Component, we have to set up the constructor code using the super() to first construct a React Component
 
-        this.state = { lat: null } //state object. Will contain relevant data like our latitude. We initialise it as null since we don't know it yet. This is the only time we assign this.state using "="
+        this.state = { lat: null, errorMessage: '' } //state object. Will contain relevant data like our latitude. We initialise it as null since we don't know it yet. This is the only time we assign this.state using "="
 
         //since this will only be called once when the component is initialized, we would be better off putting it here, rather than in the render, which gets called all the time as updates are made
         window.navigator.geolocation.getCurrentPosition(
             (position) => {
                 this.setState( { lat: position.coords.latitude }); //Sets state to position latitude USING SETSTATE
             }, //Success callback gets us a position object
-            (error) => console.log(error) //failure callback gives us an error object
+            (error) => { //failure callback gives us an error object
+                this.setState( {errorMessage: error.message});
+            }
         );
     }
 
-    //React says: We have to define render(). If we don't we get an error
-    render() { //class has one method by default. Therefore we also needs to implement React.component. We are subclassing it into App class
+    //React says: We have to define render(). If we don't we get an error. It is used to render object on screen. It is run every time state changes
+    render() { //class has one method by default. Therefore we also needs to implement React.component. We are subclassing it into App clas
 
-        return <div>Latitude: {this.state.lat} </div>
+        //Conditional loading of Latitude, error message or a loading screen, depending on state of the component
+        if( this.state.errorMessage && !this.state.lat) {
+            return <div> Error: {this.state.errorMessage} </div>
+        }
+
+        if(!this.state.errorMessage && this.state.lat) {
+            return <div>Latitude: {this.state.lat}</div>
+        }
+        
+        return( <div>Loading...</div>)
     }
 }
 
