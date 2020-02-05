@@ -9,18 +9,21 @@ class App extends React.Component { //Class component instead of functional comp
 
         this.state = { lat: null, errorMessage: '' } //state object. Will contain relevant data like our latitude. We initialise it as null since we don't know it yet. This is the only time we assign this.state using "="
 
-        //since this will only be called once when the component is initialized, we would be better off putting it here, rather than in the render, which gets called all the time as updates are made
-        window.navigator.geolocation.getCurrentPosition(
-            (position) => {
-                this.setState( { lat: position.coords.latitude }); //Sets state to position latitude USING SETSTATE
-            }, //Success callback gets us a position object
-            (error) => { //failure callback gives us an error object
-                this.setState( {errorMessage: error.message});
+    }
+
+
+    //this method runs when the component is mounted for the first time. It is not run when updating or rerendering. This is why we put the API call inside of it. That way the constructor also only does one thing: initialising our state
+    componentDidMount(){
+         //since this will only be called once when the component is initialized, we would be better off putting it here, rather than in the render, which gets called all the time as updates are made
+         window.navigator.geolocation.getCurrentPosition(
+            (position) => this.setState( { lat: position.coords.latitude }),
+            (error) => {this.setState( {errorMessage: error.message});
             }
         );
     }
 
     //React says: We have to define render(). If we don't we get an error. It is used to render object on screen. It is run every time state changes
+    //render should be pretty pure and only return JSX. Not anything else.
     render() { //class has one method by default. Therefore we also needs to implement React.component. We are subclassing it into App clas
 
         //Conditional loading of Latitude, error message or a loading screen, depending on state of the component
